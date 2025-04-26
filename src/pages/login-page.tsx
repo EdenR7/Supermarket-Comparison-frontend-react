@@ -30,9 +30,10 @@ export type LoginFormValues = z.infer<typeof formSchema>;
 // Define your form schema.
 const formSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8).regex(REGEX_PASSWORD, {
-    message: PASSWORD_MESSAGE,
-  }),
+  // password: z.string().min(8).regex(REGEX_PASSWORD, {
+  //   message: PASSWORD_MESSAGE,
+  // }),
+  password: z.string().min(4),
 });
 
 function LoginPage() {

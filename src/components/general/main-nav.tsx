@@ -10,7 +10,7 @@ export function MainNav() {
 
   return (
     <header className="sticky top-0 py-2 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-md dark:border-b dark: border-b-primary">
-      <div className=" flex justify-between h-14 max-w-screen-2xl items-center px-6">
+      <div className=" flex justify-between h-14 max-w-screen-2xl items-center px-6 2xl:mx-auto">
         <div className="flex gap-4">
           <Link
             to="/"

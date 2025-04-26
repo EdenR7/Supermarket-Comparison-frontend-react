@@ -7,7 +7,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   config => {
-    let token = localStorage.getItem("jwt-shopify") || null;
+    let token = localStorage.getItem("super-market-token") || null;
     // removing the first and last character of the token, which are quotes
 
     if (token) {

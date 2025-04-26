@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loggedInUser, setLoggedInUser] = useState<
     LoggedInUser | null | undefined
   >(undefined);
-  const [token, setToken] = useLocalStorage("jwt-shopify", null);
+  const [token, setToken] = useLocalStorage("super-market-token", null);
 
   useEffect(() => {
     if (!token) {
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     async function fetchUser() {
       try {
-        const response = await api.get("/auth/loggedInUser");
+        const response = await api.get("/users/me");
         setLoggedInUser(response.data);
       } catch (error: any) {
         if (error.response?.status === 401) {
