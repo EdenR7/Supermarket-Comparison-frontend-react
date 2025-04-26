@@ -6,7 +6,7 @@ export default function PlatformLayout() {
   return (
     <>
       <MainNav />
-      <div className=" px-6 py-8 max-w-screen-2xl 2xl:mx-auto">
+      <div className=" px-6 py-8 max-w-screen-2xl h-full 2xl:mx-auto">
         <Outlet />
       </div>
     </>

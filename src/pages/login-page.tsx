@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/form";
 
 import { useAuth } from "@/providers/auth-provider";
-import { PASSWORD_MESSAGE, REGEX_PASSWORD } from "@/constants/auth.constant";
+// import { PASSWORD_MESSAGE, REGEX_PASSWORD } from "@/constants/auth.constant";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 
 // Infer the type of the form values from the schema. we are using it also on AuthProvider.

@@ -4,17 +4,19 @@ import { AuthButton } from "./auth-button";
 import { UserButton } from "./user-button";
 import { useAuth } from "@/providers/auth-provider";
 import MainSideBar from "./main-sidebar";
+import { IconInput } from "../ui/input";
+import { Search } from "lucide-react";
 
 export function MainNav() {
   const { loggedInUser } = useAuth();
 
   return (
     <header className="sticky top-0 py-2 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-md dark:border-b dark: border-b-primary">
-      <div className=" flex justify-between h-14 max-w-screen-2xl items-center px-6 2xl:mx-auto">
-        <div className="flex gap-4">
+      <div className=" flex justify-between h-14 max-w-screen-2xl items-center px-6 2xl:mx-auto gap-10">
+        <div className="flex gap-4 flex-1">
           <Link
             to="/"
-            className="uppercase mr-4 flex items-center space-x-2 lg:mr-6 text-lg"
+            className="uppercase me-4 flex items-center space-x-2 lg:me-6 text-lg"
           >
             Logo
           </Link>
@@ -22,14 +24,11 @@ export function MainNav() {
             <Link className=" hover:underline decoration-primary" to="/about">
               About
             </Link>
-            <Link className=" hover:underline decoration-primary" to="/contact">
-              Contact
-            </Link>
             <Link
               className=" hover:underline decoration-primary"
-              to="/services"
+              to="/products"
             >
-              Services
+              Products
             </Link>
             <Link
               className=" hover:underline decoration-primary"
@@ -38,12 +37,16 @@ export function MainNav() {
               Protected
             </Link>
           </nav>
+          {/* Should be the input component */}
+          <div className="hidden break-500px:block break-800px:ms-4 w-full max-w-2xl flex-1">
+            <IconInput Icon={Search} />
+          </div>
         </div>
         <div className="flex items-center space-x-2 md:justify-end">
           <div className=" hidden break-500px:block">
             {loggedInUser ? <UserButton /> : <AuthButton />}
           </div>
-          <ModeToggle />
+          {/* <ModeToggle /> */}
           <MainSideBar />
         </div>
       </div>

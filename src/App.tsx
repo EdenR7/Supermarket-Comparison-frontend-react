@@ -14,6 +14,7 @@ import AboutPage from "./pages/about-page";
 import { useAuth } from "./providers/auth-provider";
 import TeamPage from "./pages/vision-page";
 import VisionPage from "./pages/team-page";
+import ProductsPage from "./pages/products-page";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,6 @@ const router = createBrowserRouter([
         index: true,
         element: <div>Home</div>,
       },
-
       {
         path: "about",
         element: <AboutPage />,
@@ -40,12 +40,8 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "contact",
-        element: <div>Contact</div>,
-      },
-      {
-        path: "services",
-        element: <div>Services</div>,
+        path: "products",
+        element: <ProductsPage />,
       },
       {
         path: "protected",
