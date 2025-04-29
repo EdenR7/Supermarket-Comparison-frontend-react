@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 h-[72px] mt-auto flex items-center">
+    <footer className="overflow-hidden border-t border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 h-[72px] mt-auto flex items-center">
       <div className="max-w-screen-2xl mx-auto px-6 w-full">
         <div className="flex justify-between items-center">
           <div className="text-sm text-muted-foreground">
