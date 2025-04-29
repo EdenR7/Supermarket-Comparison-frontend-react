@@ -15,6 +15,7 @@ import { useAuth } from "./providers/auth-provider";
 import TeamPage from "./pages/vision-page";
 import VisionPage from "./pages/team-page";
 import ProductsPage from "./pages/products-page";
+import NotFoundPage from "./pages/not-found-page";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
       {
         path: "products",
         element: <ProductsPage />,
+        children: [],
       },
       {
         path: "protected",
@@ -66,6 +68,10 @@ const router = createBrowserRouter([
         element: <RegisterPage />,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ]);
 

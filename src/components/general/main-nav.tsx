@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ModeToggle } from "./mode-toggle";
+// import { ModeToggle } from "./mode-toggle";
 import { AuthButton } from "./auth-button";
 import { UserButton } from "./user-button";
 import { useAuth } from "@/providers/auth-provider";
