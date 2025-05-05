@@ -1,42 +1,31 @@
-// Authentication service for login, registration, etc.
+import api from "@/lib/api";
+import { LoginFormValues as LoginCredentials } from "@/pages/login-page";
+import { RegisterFormValues } from "@/pages/register-page";
+import { AxiosResponse } from "axios";
+// import { LoggedInUserI } from "@/types/users/user.types";
 
-interface AuthResponse {
-  token: string;
-  user: {
-    id: string;
-    email: string;
-  };
-}
-
-interface RegisterData {
-  name: string;
-  email: string;
-  password: string;
-}
+type RegisterCredentials = Omit<RegisterFormValues, "confirmPassword">;
+// export type RegisterData = Omit<LoggedInUserI, "mainCart"> & {
+//   token: string;
+// };
 
 export const authService = {
-  login: async (email: string, password: string): Promise<AuthResponse> => {
+  login: async (credentials: LoginCredentials): Promise<AxiosResponse> => {
     try {
-      // API call to authenticate user
-      return {
-        token: "sample-jwt-token",
-        user: { id: "user-id", email },
-      };
+      const response = await api.post("/auth/login", credentials);
+      return response;
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Error logging in:", error);
       throw error;
     }
   },
 
-  register: async (userData: RegisterData): Promise<AuthResponse> => {
+  register: async (userData: RegisterCredentials): Promise<AxiosResponse> => {
     try {
-      // API call to register user
-      return {
-        token: "sample-jwt-token",
-        user: { id: "new-user-id", email: userData.email },
-      };
+      const response = await api.post("/auth/register", userData);
+      return response;
     } catch (error) {
-      console.error("Registration error:", error);
+      console.error("Error registering:", error);
       throw error;
     }
   },

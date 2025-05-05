@@ -6,13 +6,14 @@ import { useAuth } from "@/providers/auth-provider";
 import MainSideBar from "./main-sidebar";
 import { IconInput } from "../ui/input";
 import { Search } from "lucide-react";
+import { CategoryNavbar } from "../shared/CategoryNavbar";
 
 export function MainNav() {
   const { loggedInUser } = useAuth();
 
   return (
-    <header className="sticky top-0 py-2 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-md dark:border-b dark: border-b-primary">
-      <div className=" flex justify-between h-14 max-w-screen-2xl items-center px-6 2xl:mx-auto gap-10">
+    <header className="sticky top-0 py-2 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:border-b dark: border-b-primary">
+      <div className=" flex justify-between h-14 max-w-screen-2xl items-center px-6 2xl:mx-auto 2xl:px-0 gap-10">
         <div className="flex gap-4 flex-1">
           <Link
             to="/"
@@ -50,6 +51,8 @@ export function MainNav() {
           <MainSideBar />
         </div>
       </div>
+      <CategoryNavbar />
+
     </header>
   );
 }

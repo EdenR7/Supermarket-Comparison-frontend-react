@@ -8,19 +8,19 @@ import {
 import { Button } from "../ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-interface PaginationAppProps {
+interface PaginatorAppProps {
   totalEntities: number;
   perPage: number;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function PaginationApp({
+export default function PaginatorApp({
   totalEntities,
   perPage,
   page,
   setPage,
-}: PaginationAppProps) {
+}: PaginatorAppProps) {
   if (!totalEntities || totalEntities < 1) return null;
 
   const totalPages = Math.ceil(totalEntities / perPage);
@@ -40,26 +40,37 @@ export default function PaginationApp({
             <ArrowLeft size={14} />
           </Button>
         </PaginationItem>
-        {page > 1 && (
+        {/* {page > 1 && (
           <PaginationItem>
             <PaginationLink onClick={() => setPage(page - 1)}>
               {page - 1}
             </PaginationLink>
           </PaginationItem>
-        )}
+        )} */}
         <PaginationItem>
           <PaginationLink isActive>{page}</PaginationLink>
         </PaginationItem>
-        {page < totalPages && (
+        {/* {page < totalPages && (
           <PaginationItem>
             <PaginationLink onClick={() => setPage(page + 1)}>
               {page + 1}
             </PaginationLink>
           </PaginationItem>
+        )} */}
+        {page < totalPages && (
+          // <PaginationItem>
+          <PaginationEllipsis />
+          // {/* </PaginationItem> */}
         )}
-        {page < totalPages - 1 && (
+        {totalPages > 1 && page < totalPages && (
           <PaginationItem>
-            <PaginationEllipsis onClick={() => setPage(totalPages)} />
+            <PaginationLink
+              className="cursor-pointer"
+              isActive
+              onClick={() => setPage(totalPages)}
+            >
+              {totalPages}
+            </PaginationLink>
           </PaginationItem>
         )}
         <PaginationItem>

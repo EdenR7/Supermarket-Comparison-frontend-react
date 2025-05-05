@@ -1,17 +1,13 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { useLocalStorage } from "@uidotdev/usehooks";
-import api from "@/lib/api";
 import { RegisterFormValues } from "@/pages/register-page";
 import { LoginFormValues as LoginCredentials } from "@/pages/login-page";
-
-interface LoggedInUser {
-  _id: string;
-  username: string;
-  imageUrl: string | null;
-}
+import { LoggedInUserI } from "@/types/users/user.types";
+import { userService } from "@/services/api/userService";
+import { authService } from "@/services/api/authService";
 
 interface AuthContextType {
-  loggedInUser: LoggedInUser | null | undefined;
+  loggedInUser: LoggedInUserI | null | undefined;
   login: (user: LoginCredentials) => Promise<void>;
   register: (user: RegisterCredentials) => Promise<void>;
   logout: () => void;
@@ -23,7 +19,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loggedInUser, setLoggedInUser] = useState<
-    LoggedInUser | null | undefined
+    LoggedInUserI | null | undefined
   >(undefined);
   const [token, setToken] = useLocalStorage("super-market-token", null);
 
@@ -31,23 +27,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (!token) {
       setLoggedInUser(null);
       return;
-    }
-
-    async function fetchUser() {
-      try {
-        const response = await api.get("/users/me");
-        setLoggedInUser(response.data);
-      } catch (error: any) {
-        if (error.response?.status === 401) {
-          console.error("Invalid token, logging out");
-          logout();
-        } else if (error.response?.status === 404) {
-          console.error("User not found, logging out");
-          logout();
-        } else {
-          console.error("Error fetching user data:", error);
-        }
-      }
     }
 
     fetchUser();
@@ -58,9 +37,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setLoggedInUser(null);
   }
 
+  async function fetchUser() {
+    const user = await userService.getUser();
+    if (user) {
+      console.log("user", user);
+      setLoggedInUser(user);
+    } else {
+      logout();
+    }
+  }
+
   async function login(cred: LoginCredentials) {
     try {
-      const response = await api.post("/auth/login", cred);
+      const response = await authService.login(cred);
       setToken(response.data.token);
     } catch (error) {
       console.error("Error logging in:", error);
@@ -70,7 +59,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   async function register(cred: RegisterCredentials) {
     try {
-      await api.post("/auth/register", cred);
+      const response = await authService.register(cred);
+      setToken(response.data?.token);
     } catch (error) {
       console.error("Error registering:", error);
       throw error;
