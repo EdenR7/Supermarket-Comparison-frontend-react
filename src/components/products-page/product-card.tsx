@@ -44,7 +44,9 @@ function ProductCard({ product }: { product: ProductWithPricesI }) {
           </span>
         </CardDescription>
         {isInCart ? (
-          <div className="max-w-52 mx-auto">{<ChangeProductQty />}</div>
+          <div className="max-w-52 mx-auto">
+            {<ChangeProductQty productId={product.id} />}
+          </div>
         ) : (
           <div className="flex justify-center">
             <AddToCartButton productId={product?.id} />

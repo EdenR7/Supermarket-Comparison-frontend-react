@@ -1,7 +1,7 @@
 // Cart service for shopping cart operations
 
 import api from "@/lib/api";
-import { CartI, CartItemI } from "@/types/cart/cart.types";
+import { CartItemI } from "@/types/cart/cart.types";
 const cartBaseApi = "/carts";
 
 export const cartService = {
@@ -32,11 +32,17 @@ export const cartService = {
     }
   },
 
-  isProductInCart: async (cartId: number, productId: number) => {
+  deleteCartItem: async (cartId: number, cartItemId: number) => {
     try {
-      
+      const response = await api.delete(`${cartBaseApi}/cart-items/${cartId}`, {
+        data: {
+          cartItemId,
+        },
+      });
+      return response.data;
     } catch (error) {
-      
+      console.error("Error deleting cart item:", error);
+      throw error;
     }
   },
 };
