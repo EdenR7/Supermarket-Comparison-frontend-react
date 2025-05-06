@@ -8,11 +8,15 @@ import {
 import ChangeProductQty from "../shared/change-product-qty";
 import { ProductWithPricesI } from "@/types/products/product.types";
 import AddToCartButton from "../shared/add-to-cart-button";
-import { useUserCart } from "@/providers/user_cart-provider";
+import { useCart } from "@/hooks/useCart";
+import { useMemo } from "react";
 
 function ProductCard({ product }: { product: ProductWithPricesI }) {
-  const { isProductInCart } = useUserCart();
-  const isInCart = isProductInCart(product?.id);
+  const { cart: userCart } = useCart();
+
+  const isInCart = useMemo(() => {
+    return userCart?.cartItems.some((item) => item.product.id === product.id);
+  }, [userCart?.cartItems, product.id]);
 
   function claculateAvgPrice(prices: { price: number }[]) {
     const total = prices.reduce((acc, price) => acc + Number(price.price), 0);

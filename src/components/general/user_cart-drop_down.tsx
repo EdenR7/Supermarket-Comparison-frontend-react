@@ -1,9 +1,11 @@
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { ShoppingCart } from "lucide-react";
-import { useUserCart } from "@/providers/user_cart-provider";
+import { useCart } from "@/hooks/useCart";
 
 function UserCartDropDown() {
-  const { userMainCart } = useUserCart();
+  const { cart: userMainCart, isFetching } = useCart();
+  console.log(isFetching);
+  
   const cartItemsCount = userMainCart?.cartItems.length || 0;
   const isCartItemsLenReqMoreSpace = cartItemsCount > 99;
   return (

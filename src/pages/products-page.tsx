@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AppLoader from "@/components/shared/app-loader";
-import { useCombinedGetAllCountAllProducts } from "@/hooks/react-query-hooks/combined-get_all-count_all";
+import { useCombinedGetAllCountAllProducts } from "@/hooks/react-query-hooks/products-hooks/combined-get_all-count_all";
 import PaginatorApp from "@/components/shared/pagination-app";
 import ProductCard from "@/components/products-page/product-card";
 

@@ -1,8 +1,15 @@
 import { Minus, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { useUserCart } from "@/providers/user_cart-provider";
 
 function ChangeProductQty() {
+  const { userMainCart } = useUserCart();
+
+  // const [qty, setQty] = useState(0);
+
+  
+
   return (
     <div className="flex items-center gap-2 justify-between">
       <Button variant="outline" className="text-sm px-2">

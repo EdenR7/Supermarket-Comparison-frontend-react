@@ -1,15 +1,25 @@
+import { useAuth } from "@/providers/auth-provider";
 import { Button } from "../ui/button";
-import { useUserCart } from "@/providers/user_cart-provider";
+import { useAddCartItem } from "@/hooks/react-query-hooks/cart-hooks/useAddCartItem";
 
 interface AddToCartButtonProps {
   productId: number;
 }
 
 function AddToCartButton({ productId }: AddToCartButtonProps) {
-  const { addProductToCart } = useUserCart();
+  const { loggedInUser } = useAuth();
+  const addItemHandler = useAddCartItem(loggedInUser?.id);
 
   function handleAddProductToCart() {
-    addProductToCart(productId, 1);
+    if (loggedInUser) {
+      addItemHandler.mutate({
+        cartId: loggedInUser.mainCartId,
+        productId,
+        quantity: 1,
+      });
+    } else {
+      console.log("Please login to add to cart");
+    }
   }
   return <Button onClick={handleAddProductToCart}>Add To Cart</Button>;
 }

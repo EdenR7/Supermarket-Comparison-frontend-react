@@ -4,5 +4,6 @@ export interface LoggedInUserI {
   id: number;
   username: string;
   email: string;
+  mainCartId: number;
   mainCart: UserMainCartI;
 }
