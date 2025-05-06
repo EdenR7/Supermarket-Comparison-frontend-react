@@ -7,6 +7,7 @@ import MainSideBar from "./main-sidebar";
 import { IconInput } from "../ui/input";
 import { Search } from "lucide-react";
 import { CategoryNavbar } from "../shared/CategoryNavbar";
+import UserCartDropDown from "./user_cart-drop_down";
 
 export function MainNav() {
   const { loggedInUser } = useAuth();
@@ -43,16 +44,15 @@ export function MainNav() {
             <IconInput Icon={Search} />
           </div>
         </div>
-        <div className="flex items-center space-x-2 md:justify-end">
+        <div className="flex items-center space-x-4 md:justify-end">
+          <UserCartDropDown />
           <div className=" hidden break-500px:block">
             {loggedInUser ? <UserButton /> : <AuthButton />}
           </div>
-          {/* <ModeToggle /> */}
           <MainSideBar />
         </div>
       </div>
       <CategoryNavbar />
-
     </header>
   );
 }

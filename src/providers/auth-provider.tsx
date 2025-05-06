@@ -5,12 +5,17 @@ import { LoginFormValues as LoginCredentials } from "@/pages/login-page";
 import { LoggedInUserI } from "@/types/users/user.types";
 import { userService } from "@/services/api/userService";
 import { authService } from "@/services/api/authService";
+import { UserMainCartI } from "@/types/cart/cart.types";
 
 interface AuthContextType {
   loggedInUser: LoggedInUserI | null | undefined;
+  // setLoggedInUser: React.Dispatch<
+  //   React.SetStateAction<LoggedInUserI | null | undefined>
+  // >;
   login: (user: LoginCredentials) => Promise<void>;
   register: (user: RegisterCredentials) => Promise<void>;
   logout: () => void;
+  updateUserMainCart: (mainCart: UserMainCartI) => void;
 }
 
 type RegisterCredentials = Omit<RegisterFormValues, "confirmPassword">;
@@ -67,8 +72,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
+  function updateUserMainCart(mainCart: UserMainCartI) {
+    setLoggedInUser((prev: LoggedInUserI | null | undefined) => ({
+      ...prev!,
+      mainCart: mainCart,
+    }));
+  }
+
   return (
-    <AuthContext.Provider value={{ loggedInUser, login, register, logout }}>
+    <AuthContext.Provider
+      value={{
+        loggedInUser,
+        // setLoggedInUser,
+        login,
+        register,
+        logout,
+        updateUserMainCart,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,19 +1,20 @@
 import { ProductI } from "../products/product.types";
 
 export interface CartI {
-  CartItems: CartItemWithProductI[];
+  cartItems: CartItemI[];
   id: number;
   title: string | null;
-  type: string;
-  user_id: number;
-  updatedAt: string;
-  createdAt: string;
+  type: "main" | "saved" | "session";
 }
 
-export interface CartItemWithProductI {
+export type UserMainCartI = Omit<CartI, "type" | "title"> & {
+  type: "main";
+};
+
+export type GuestUserCartI = Omit<UserMainCartI, "id">;
+
+export interface CartItemI {
   id: number;
-  cart_id: number;
-  product_id: number;
   quantity: number;
-  Product: ProductI;
+  product: ProductI;
 }
