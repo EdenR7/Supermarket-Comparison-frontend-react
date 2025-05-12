@@ -1,17 +1,21 @@
 import { Minus, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { useUserCart } from "@/providers/user_cart-provider";
-import { useMemo, useState } from "react";
+import { useUserMainCart } from "@/providers/user_cart-provider";
+import { useEffect, useMemo, useState } from "react";
 import useDeleteCartItem from "@/hooks/react-query-hooks/cart-hooks/useDeleteCartItem";
 import { useAuth } from "@/providers/auth-provider";
+import { useChangeCartItemQty } from "@/hooks/react-query-hooks/cart-hooks/useChangeCartItemQty";
+import { useDebouncedCallback } from "@/hooks/useDebouncedCallbacks";
 
 interface ChangeProductQtyProps {
   productId: number;
 }
 
 function ChangeProductQty({ productId }: ChangeProductQtyProps) {
-  const { userMainCart } = useUserCart();
+  console.log("productId", productId);
+
+  const { userMainCart } = useUserMainCart();
   const { loggedInUser } = useAuth();
   const deleteCartItemHandler = useDeleteCartItem(loggedInUser?.id);
   const cartItemId = useMemo(
@@ -19,6 +23,21 @@ function ChangeProductQty({ productId }: ChangeProductQtyProps) {
       userMainCart?.cartItems.find((item) => item.product.id === productId)?.id,
     [userMainCart, productId]
   );
+
+  const debouncedChangeCartItemQty = useDebouncedCallback(
+    (newQty: number, cartItemId: number) => {
+      changeCartItemQtyHandler.mutate({
+        cartItemId: cartItemId,
+        newQty: newQty,
+      });
+    },
+    1000
+  );
+
+  const changeCartItemQtyHandler = useChangeCartItemQty({
+    userId: loggedInUser?.id,
+    cartItemId: cartItemId,
+  });
 
   const [qty, setQty] = useState(getQty);
 
@@ -32,11 +51,14 @@ function ChangeProductQty({ productId }: ChangeProductQtyProps) {
 
   function handleQtyChange(value: number) {
     setQty(value);
+    if (userMainCart?.id && cartItemId) {
+      debouncedChangeCartItemQty(value, cartItemId);
+    }
   }
 
   function handleMinusClick() {
     if (qty > 1) {
-      setQty((prev) => prev - 1);
+      handleQtyChange(qty - 1);
     } else if (userMainCart?.id && cartItemId) {
       deleteCartItemHandler.mutate({
         cartId: userMainCart.id,
@@ -45,10 +67,6 @@ function ChangeProductQty({ productId }: ChangeProductQtyProps) {
     } else {
       console.log("no cart id or cart item id");
     }
-  }
-
-  function handlePlusClick() {
-    setQty((prev) => prev + 1);
   }
 
   return (
@@ -70,7 +88,7 @@ function ChangeProductQty({ productId }: ChangeProductQtyProps) {
       <Button
         variant="outline"
         className="text-sm px-2"
-        onClick={handlePlusClick}
+        onClick={() => handleQtyChange(qty + 1)}
       >
         <Plus size={14} />
       </Button>
