@@ -1,5 +1,6 @@
 import { useAuth } from "@/providers/auth-provider";
 import { useGetMainCart } from "./react-query-hooks/cart-hooks/useGetMainCart";
+import { UserMainCartI } from "@/types/cart/cart.types";
 
 export function useCart() {
   const { loggedInUser } = useAuth();
@@ -21,7 +22,11 @@ export function useCart() {
     };
   } else {
     return {
-      cart: null,
+      cart: {
+        cartItems: [],
+        id: -1,
+        type: "main",
+      } as UserMainCartI,
       isLoading: false,
       isFetching: false,
       error: null,

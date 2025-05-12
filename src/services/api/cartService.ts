@@ -45,4 +45,19 @@ export const cartService = {
       throw error;
     }
   },
+
+  changeCartItemQty: async (cartItemId: number, newQty: number) => {
+    try {
+      const response = await api.patch(
+        `${cartBaseApi}/cart-items/qty/${cartItemId}`,
+        {
+          newQty,
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error("Error changing cart item quantity:", error);
+      throw error;
+    }
+  },
 };

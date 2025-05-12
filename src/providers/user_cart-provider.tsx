@@ -1,11 +1,10 @@
 import { CartItemI, UserMainCartI } from "@/types/cart/cart.types";
 import { createContext, ReactNode, useContext } from "react";
 import { useAuth } from "./auth-provider";
-import { cartService } from "@/services/api/cartService";
 
 interface UserCartContextType {
   userMainCart: UserMainCartI | null;
-  addProductToCart: (productId: number, quantity: number) => Promise<void>;
+  addProductToCart: (newCartItem: CartItemI) => Promise<void>;
   isProductInCart: (productId: number) => boolean;
 }
 
@@ -14,6 +13,7 @@ const UserCartContext = createContext<UserCartContextType | null>(null);
 export const UserCartProvider = ({ children }: { children: ReactNode }) => {
   const { loggedInUser, updateUserMainCart } = useAuth();
   const userMainCart = loggedInUser?.mainCart || null;
+
   // const [userMainCart, setUserMainCart] = useState<UserMainCartI | null>(null);
 
   // useEffect(() => {
@@ -24,30 +24,18 @@ export const UserCartProvider = ({ children }: { children: ReactNode }) => {
   // Sync with local storage
   // }, [loggedInUser]);
 
-  async function addProductToCart(productId: number, quantity: number = 1) {
+  async function addProductToCart(newCartItem: CartItemI) {
     if (!userMainCart || !userMainCart.id) {
       console.error("No user main cart found");
       return;
     }
     try {
-      const newCartItem: CartItemI = await cartService.addProductToCart(
-        userMainCart.id,
-        productId,
-        quantity
-      );
+      // const newCartItem: CartItemI = await cartService.addProductToCart(
+      //   userMainCart.id,
+      //   productId,
+      //   quantity
+      // );
 
-      // setUserMainCart({
-      //   ...userMainCart,
-      //   cartItems: [...userMainCart.cartItems, newCartItem],
-      // });
-
-      // setLoggedInUser((prev: LoggedInUserI | null | undefined) => ({
-      //   ...prev!,
-      //   mainCart: {
-      //     ...userMainCart,
-      //     cartItems: [...userMainCart.cartItems, newCartItem],
-      //   },
-      // }));
       updateUserMainCart({
         ...userMainCart,
         cartItems: [...userMainCart.cartItems, newCartItem],
@@ -74,10 +62,10 @@ export const UserCartProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export function useUserCart() {
+export function useUserMainCart() {
   const context = useContext(UserCartContext);
   if (!context) {
-    throw new Error("useUserCart must be used within a UserCartProvider");
+    throw new Error("useUserMainCart must be used within a UserCartProvider");
   }
   return context;
 }

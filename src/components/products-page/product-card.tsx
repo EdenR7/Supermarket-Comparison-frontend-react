@@ -8,12 +8,15 @@ import {
 import ChangeProductQty from "../shared/change-product-qty";
 import { ProductWithPricesI } from "@/types/products/product.types";
 import AddToCartButton from "../shared/add-to-cart-button";
-import { useCart } from "@/hooks/useCart";
 import { useMemo } from "react";
+import { UserMainCartI } from "@/types/cart/cart.types";
 
-function ProductCard({ product }: { product: ProductWithPricesI }) {
-  const { cart: userCart } = useCart();
+interface ProductCardProps {
+  product: ProductWithPricesI;
+  cart: UserMainCartI;
+}
 
+function ProductCard({ product, cart: userCart }: ProductCardProps) {
   const isInCart = useMemo(() => {
     return userCart?.cartItems.some((item) => item.product.id === product.id);
   }, [userCart?.cartItems, product.id]);
@@ -49,7 +52,11 @@ function ProductCard({ product }: { product: ProductWithPricesI }) {
           </div>
         ) : (
           <div className="flex justify-center">
-            <AddToCartButton productId={product?.id} />
+            <AddToCartButton
+              productId={product?.id}
+              cartId={userCart.id}
+              isMainCart={true}
+            />
           </div>
         )}
       </CardContent>
