@@ -1,32 +1,31 @@
 import { useAuth } from "@/providers/auth-provider";
 import { Button } from "../ui/button";
-// import { useAddCartItem } from "@/hooks/react-query-hooks/cart-hooks/useAddCartItem";
-import { useUserMainCart } from "@/providers/user_cart-provider";
 import { useAddCartItem } from "@/hooks/react-query-hooks/cart-hooks/useAddCartItem";
+import { ProductWithPricesI } from "@/types/products/product.types";
 
 interface AddToCartButtonProps {
-  productId: number;
+  product: ProductWithPricesI;
   cartId: number;
   isMainCart: boolean;
 }
 
 function AddToCartButton({
-  productId,
+  product,
   cartId,
   isMainCart,
 }: AddToCartButtonProps) {
   const { loggedInUser } = useAuth();
-  const { addProductToCart } = useUserMainCart();
   const addItemHandler = useAddCartItem(loggedInUser?.id);
-
+  
   async function handleAddProductToCart() {
     if (loggedInUser) {
-      const newCartItem = await addItemHandler.mutateAsync({
+      addItemHandler.mutateAsync({
         cartId: cartId,
-        productId,
+        product: product,
         quantity: 1,
+        isMainCart,
       });
-      if (isMainCart) addProductToCart(newCartItem);
+      // console.log("newCartItem", newCartItem);
     } else {
       console.log("Please login to add to cart");
     }

@@ -4,7 +4,7 @@ import { useCart } from "@/hooks/useCart";
 
 function UserCartDropDown() {
   const { cart: userMainCart, isFetching } = useCart();
-  console.log(isFetching);
+  // console.log(isFetching);
   
   const cartItemsCount = userMainCart?.cartItems.length || 0;
   const isCartItemsLenReqMoreSpace = cartItemsCount > 99;

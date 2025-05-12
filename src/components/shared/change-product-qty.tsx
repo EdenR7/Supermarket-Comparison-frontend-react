@@ -2,7 +2,7 @@ import { Minus, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useUserMainCart } from "@/providers/user_cart-provider";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import useDeleteCartItem from "@/hooks/react-query-hooks/cart-hooks/useDeleteCartItem";
 import { useAuth } from "@/providers/auth-provider";
 import { useChangeCartItemQty } from "@/hooks/react-query-hooks/cart-hooks/useChangeCartItemQty";
@@ -13,8 +13,6 @@ interface ChangeProductQtyProps {
 }
 
 function ChangeProductQty({ productId }: ChangeProductQtyProps) {
-  console.log("productId", productId);
-
   const { userMainCart } = useUserMainCart();
   const { loggedInUser } = useAuth();
   const deleteCartItemHandler = useDeleteCartItem(loggedInUser?.id);
@@ -42,11 +40,13 @@ function ChangeProductQty({ productId }: ChangeProductQtyProps) {
   const [qty, setQty] = useState(getQty);
 
   function getQty() {
+    console.log(userMainCart);
+    
     if (!userMainCart) return 0;
     const cartItem = userMainCart.cartItems.find(
       (item) => item.product.id === productId
     );
-    return cartItem?.quantity || 0;
+    return cartItem?.quantity || -2;
   }
 
   function handleQtyChange(value: number) {
@@ -57,6 +57,8 @@ function ChangeProductQty({ productId }: ChangeProductQtyProps) {
   }
 
   function handleMinusClick() {
+    console.log(userMainCart?.id , cartItemId);
+
     if (qty > 1) {
       handleQtyChange(qty - 1);
     } else if (userMainCart?.id && cartItemId) {

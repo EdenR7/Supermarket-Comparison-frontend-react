@@ -14,28 +14,12 @@ export const UserCartProvider = ({ children }: { children: ReactNode }) => {
   const { loggedInUser, updateUserMainCart } = useAuth();
   const userMainCart = loggedInUser?.mainCart || null;
 
-  // const [userMainCart, setUserMainCart] = useState<UserMainCartI | null>(null);
-
-  // useEffect(() => {
-  // if (loggedInUser) {
-  // setUserMainCart(loggedInUser.mainCart);
-  // }
-  // console.log("UserCartProvider useEffect");
-  // Sync with local storage
-  // }, [loggedInUser]);
-
   async function addProductToCart(newCartItem: CartItemI) {
     if (!userMainCart || !userMainCart.id) {
       console.error("No user main cart found");
       return;
     }
-    try {
-      // const newCartItem: CartItemI = await cartService.addProductToCart(
-      //   userMainCart.id,
-      //   productId,
-      //   quantity
-      // );
-
+    try {      
       updateUserMainCart({
         ...userMainCart,
         cartItems: [...userMainCart.cartItems, newCartItem],

@@ -53,7 +53,7 @@ function ProductCard({ product, cart: userCart }: ProductCardProps) {
         ) : (
           <div className="flex justify-center">
             <AddToCartButton
-              productId={product?.id}
+              product={product}
               cartId={userCart.id}
               isMainCart={true}
             />
