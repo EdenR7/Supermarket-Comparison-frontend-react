@@ -2,7 +2,7 @@ import { Minus, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useUserMainCart } from "@/providers/user_cart-provider";
-import { useMemo, useState } from "react";
+import {  useEffect, useMemo, useState } from "react";
 import useDeleteCartItem from "@/hooks/react-query-hooks/cart-hooks/useDeleteCartItem";
 import { useAuth } from "@/providers/auth-provider";
 import { useChangeCartItemQty } from "@/hooks/react-query-hooks/cart-hooks/useChangeCartItemQty";
@@ -10,9 +10,13 @@ import { useDebouncedCallback } from "@/hooks/useDebouncedCallbacks";
 
 interface ChangeProductQtyProps {
   productId: number;
+  isMainCart: boolean;
 }
 
-function ChangeProductQty({ productId }: ChangeProductQtyProps) {
+function ChangeProductQty({
+  productId,
+  isMainCart = true,
+}: ChangeProductQtyProps) {
   const { userMainCart } = useUserMainCart();
   const { loggedInUser } = useAuth();
   const deleteCartItemHandler = useDeleteCartItem(loggedInUser?.id);
@@ -22,14 +26,17 @@ function ChangeProductQty({ productId }: ChangeProductQtyProps) {
     [userMainCart, productId]
   );
 
+  console.log(cartItemId);
+
   const debouncedChangeCartItemQty = useDebouncedCallback(
     (newQty: number, cartItemId: number) => {
       changeCartItemQtyHandler.mutate({
         cartItemId: cartItemId,
         newQty: newQty,
+        isMainCart: isMainCart,
       });
     },
-    1000
+    400
   );
 
   const changeCartItemQtyHandler = useChangeCartItemQty({
@@ -40,14 +47,16 @@ function ChangeProductQty({ productId }: ChangeProductQtyProps) {
   const [qty, setQty] = useState(getQty);
 
   function getQty() {
-    console.log(userMainCart);
-    
     if (!userMainCart) return 0;
     const cartItem = userMainCart.cartItems.find(
       (item) => item.product.id === productId
     );
-    return cartItem?.quantity || -2;
+    return cartItem?.quantity || 0;
   }
+
+  useEffect(() => {
+    setQty(getQty());
+  }, [userMainCart]);
 
   function handleQtyChange(value: number) {
     setQty(value);
@@ -57,14 +66,13 @@ function ChangeProductQty({ productId }: ChangeProductQtyProps) {
   }
 
   function handleMinusClick() {
-    console.log(userMainCart?.id , cartItemId);
-
     if (qty > 1) {
       handleQtyChange(qty - 1);
     } else if (userMainCart?.id && cartItemId) {
       deleteCartItemHandler.mutate({
         cartId: userMainCart.id,
         cartItemId: cartItemId,
+        isMainCart,
       });
     } else {
       console.log("no cart id or cart item id");
