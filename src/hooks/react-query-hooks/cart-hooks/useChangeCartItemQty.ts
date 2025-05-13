@@ -2,14 +2,10 @@ import { cartService } from "@/services/api/cartService";
 import { UserMainCartI } from "@/types/cart/cart.types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useChangeCartItemQty({
-  userId,
-  cartItemId,
-}: {
-  userId: number | undefined;
-  cartItemId: number | undefined;
-}) {
+export function useChangeCartItemQty(userId: number | undefined) {
   const qClient = useQueryClient();
+  console.log("useChangeCartItemQty", userId);
+
   return useMutation({
     mutationFn: ({
       cartItemId,
@@ -17,9 +13,9 @@ export function useChangeCartItemQty({
     }: {
       cartItemId: number;
       newQty: number;
+      isMainCart: boolean;
     }) => cartService.changeCartItemQty(cartItemId, newQty),
-    onMutate: ({ newQty }) => {
-      console.log("onMutate", newQty);
+    onMutate: ({ newQty, cartItemId }) => {
       if (!userId || !cartItemId) {
         return Promise.reject(new Error("No user id or cart item id provided"));
       }
@@ -29,6 +25,7 @@ export function useChangeCartItemQty({
         "mainCart",
         userId,
       ]);
+
       qClient.setQueryData(["mainCart", userId], (oldData: UserMainCartI) => {
         return {
           ...oldData,
@@ -40,9 +37,8 @@ export function useChangeCartItemQty({
       return { prevCart };
     },
     onError(_, __, context) {
-      if (context?.prevCart) {
+      if (context?.prevCart)
         qClient.setQueryData(["mainCart", userId], context?.prevCart);
-      }
     },
   });
 }

@@ -16,7 +16,7 @@ function AddToCartButton({
 }: AddToCartButtonProps) {
   const { loggedInUser } = useAuth();
   const addItemHandler = useAddCartItem(loggedInUser?.id);
-  
+
   async function handleAddProductToCart() {
     if (loggedInUser) {
       addItemHandler.mutateAsync({

@@ -1,4 +1,3 @@
-import { useUserMainCart } from "@/providers/user_cart-provider";
 import { cartService } from "@/services/api/cartService";
 import { UserMainCartI } from "@/types/cart/cart.types";
 import { ProductWithPricesI } from "@/types/products/product.types";
@@ -7,7 +6,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 // This hook is used to add a product to a cart, if its the user main cart so it will also update the context state
 export function useAddCartItem(userId: number | undefined) {
   const qc = useQueryClient();
-  const { addProductToCart } = useUserMainCart();
 
   return useMutation({
     mutationFn: ({
@@ -26,10 +24,7 @@ export function useAddCartItem(userId: number | undefined) {
       }
       return cartService.addProductToCart(cartId, product.id, quantity);
     },
-    onSuccess(newCartItem, { isMainCart }) {
-      if (isMainCart) {
-        addProductToCart(newCartItem);
-      }
+    onSuccess(newCartItem) {
       qc.setQueryData(["mainCart", userId], (oldData: UserMainCartI) => {
         return {
           ...oldData,

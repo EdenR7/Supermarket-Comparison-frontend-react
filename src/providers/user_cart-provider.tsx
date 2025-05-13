@@ -4,7 +4,10 @@ import { useAuth } from "./auth-provider";
 
 interface UserCartContextType {
   userMainCart: UserMainCartI | null;
-  addProductToCart: (newCartItem: CartItemI) => Promise<void>;
+  userId: number | undefined;
+  addProductToCart: (newCartItem: CartItemI) => void;
+  removeProductFromCart: (cartItemId: number) => void;
+  updateProductQty: (cartItemId: number, newQty: number) => number | undefined;
   isProductInCart: (productId: number) => boolean;
 }
 
@@ -13,20 +16,50 @@ const UserCartContext = createContext<UserCartContextType | null>(null);
 export const UserCartProvider = ({ children }: { children: ReactNode }) => {
   const { loggedInUser, updateUserMainCart } = useAuth();
   const userMainCart = loggedInUser?.mainCart || null;
+  const userId = loggedInUser?.id;
 
-  async function addProductToCart(newCartItem: CartItemI) {
+  function addProductToCart(newCartItem: CartItemI) {
     if (!userMainCart || !userMainCart.id) {
       console.error("No user main cart found");
       return;
     }
-    try {      
-      updateUserMainCart({
-        ...userMainCart,
-        cartItems: [...userMainCart.cartItems, newCartItem],
-      });
-    } catch (error) {
-      console.error("Error adding to cart:", error);
+    updateUserMainCart({
+      ...userMainCart,
+      cartItems: [...userMainCart.cartItems, newCartItem],
+    });
+  }
+
+  function removeProductFromCart(cartItemId: number) {
+    if (!userMainCart || !userMainCart.id) {
+      console.error("No user main cart found");
+      return;
     }
+    // console.log("removing product from cart", cartItemId);
+    updateUserMainCart({
+      ...userMainCart,
+      cartItems: userMainCart.cartItems.filter(
+        (item) => item.id !== cartItemId
+      ),
+    });
+  }
+
+  function updateProductQty(cartItemId: number, newQty: number) {
+    if (!userMainCart || !userMainCart.id) {
+      console.error("No user main cart found");
+      return;
+    }
+    let prevQty;
+    updateUserMainCart({
+      ...userMainCart,
+      cartItems: userMainCart.cartItems.map((item) => {
+        if (item.id === cartItemId) {
+          prevQty = item.quantity;
+          return { ...item, quantity: newQty };
+        }
+        return item;
+      }),
+    });
+    return prevQty;
   }
 
   function isProductInCart(productId: number): boolean {
@@ -39,7 +72,14 @@ export const UserCartProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <UserCartContext.Provider
-      value={{ userMainCart, addProductToCart, isProductInCart }}
+      value={{
+        userMainCart,
+        userId,
+        addProductToCart,
+        updateProductQty,
+        isProductInCart,
+        removeProductFromCart,
+      }}
     >
       {children}
     </UserCartContext.Provider>

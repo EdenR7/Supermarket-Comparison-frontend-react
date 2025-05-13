@@ -1,12 +1,12 @@
 import { Minus, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { useUserMainCart } from "@/providers/user_cart-provider";
-import {  useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import useDeleteCartItem from "@/hooks/react-query-hooks/cart-hooks/useDeleteCartItem";
-import { useAuth } from "@/providers/auth-provider";
 import { useChangeCartItemQty } from "@/hooks/react-query-hooks/cart-hooks/useChangeCartItemQty";
 import { useDebouncedCallback } from "@/hooks/useDebouncedCallbacks";
+import { useCart } from "@/hooks/useCart";
+import { useAuth } from "@/providers/auth-provider";
 
 interface ChangeProductQtyProps {
   productId: number;
@@ -17,66 +17,55 @@ function ChangeProductQty({
   productId,
   isMainCart = true,
 }: ChangeProductQtyProps) {
-  const { userMainCart } = useUserMainCart();
+  const { cart: userMainCart } = useCart();
   const { loggedInUser } = useAuth();
   const deleteCartItemHandler = useDeleteCartItem(loggedInUser?.id);
-  const cartItemId = useMemo(
-    () =>
-      userMainCart?.cartItems.find((item) => item.product.id === productId)?.id,
-    [userMainCart, productId]
-  );
-
-  console.log(cartItemId);
-
+  const changeCartItemQtyHandler = useChangeCartItemQty(loggedInUser?.id);
   const debouncedChangeCartItemQty = useDebouncedCallback(
     (newQty: number, cartItemId: number) => {
-      changeCartItemQtyHandler.mutate({
+      changeCartItemQtyHandler.mutateAsync({
         cartItemId: cartItemId,
         newQty: newQty,
         isMainCart: isMainCart,
       });
     },
-    400
+    500
   );
 
-  const changeCartItemQtyHandler = useChangeCartItemQty({
-    userId: loggedInUser?.id,
-    cartItemId: cartItemId,
-  });
+  const cartItem = useMemo(
+    () => userMainCart?.cartItems.find((item) => item.product.id === productId),
+    [userMainCart?.cartItems, productId]
+  );
 
-  const [qty, setQty] = useState(getQty);
-
-  function getQty() {
-    if (!userMainCart) return 0;
-    const cartItem = userMainCart.cartItems.find(
-      (item) => item.product.id === productId
-    );
-    return cartItem?.quantity || 0;
-  }
+  const [qty, setQty] = useState(() => cartItem?.quantity || 0);
 
   useEffect(() => {
-    setQty(getQty());
-  }, [userMainCart]);
+    if (cartItem?.quantity !== undefined && cartItem.quantity !== qty) {
+      setQty(cartItem.quantity);
+    }
+  }, [cartItem?.quantity]);
 
   function handleQtyChange(value: number) {
     setQty(value);
-    if (userMainCart?.id && cartItemId) {
-      debouncedChangeCartItemQty(value, cartItemId);
+    if (userMainCart?.id && cartItem?.id) {
+      debouncedChangeCartItemQty(value, cartItem.id);
     }
   }
 
   function handleMinusClick() {
     if (qty > 1) {
       handleQtyChange(qty - 1);
-    } else if (userMainCart?.id && cartItemId) {
-      deleteCartItemHandler.mutate({
+    } else if (userMainCart?.id && cartItem?.id) {
+      deleteCartItemHandler.mutateAsync({
         cartId: userMainCart.id,
-        cartItemId: cartItemId,
+        cartItemId: cartItem.id,
         isMainCart,
       });
-    } else {
-      console.log("no cart id or cart item id");
     }
+  }
+
+  function handlePlusClick() {
+    handleQtyChange(qty + 1);
   }
 
   return (
@@ -98,7 +87,7 @@ function ChangeProductQty({
       <Button
         variant="outline"
         className="text-sm px-2"
-        onClick={() => handleQtyChange(qty + 1)}
+        onClick={handlePlusClick}
       >
         <Plus size={14} />
       </Button>

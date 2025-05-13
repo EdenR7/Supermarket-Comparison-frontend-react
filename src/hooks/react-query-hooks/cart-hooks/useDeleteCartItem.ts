@@ -12,6 +12,7 @@ export default function useDeleteCartItem(userId: number | undefined) {
     }: {
       cartId: number;
       cartItemId: number;
+      isMainCart: boolean;
     }) => {
       if (!userId) {
         return Promise.reject(new Error("No user id provided"));
@@ -24,27 +25,26 @@ export default function useDeleteCartItem(userId: number | undefined) {
         "mainCart",
         userId,
       ]);
-      if (prevCart) {
-        const updatedCart = {
-          ...prevCart,
-          cartItems: prevCart.cartItems.filter(
-            (item) => item.id !== cartItemId
-          ),
-        };
-        queryClient.setQueryData(["mainCart", userId], updatedCart);
-      }
-
+      queryClient.setQueryData(
+        ["mainCart", userId],
+        (prevCart: UserMainCartI) => {
+          return {
+            ...prevCart,
+            cartItems: prevCart.cartItems.filter(
+              (item) => item.id !== cartItemId
+            ),
+          };
+        }
+      );
       return {
         prevCart,
       };
     },
+    // Rollback
     onError: (_, __, context) => {
       if (context?.prevCart) {
         queryClient.setQueryData(["mainCart", userId], context.prevCart);
       }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["mainCart", userId] });
     },
   });
 }

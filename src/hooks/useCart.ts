@@ -7,15 +7,15 @@ export function useCart() {
   const userId = loggedInUser?.id;
 
   const {
-    data: cart,
+    data: fetchedCart,
     isLoading: isCartLoading,
     isFetching,
     error: cartError,
   } = useGetMainCart({ userId });
 
-  if (loggedInUser && userId) {
+  if (userId) {
     return {
-      cart,
+      cart: fetchedCart,
       isLoading: isCartLoading,
       isFetching,
       error: cartError,

@@ -7,7 +7,7 @@ interface UseGetMainCartProps {
 }
 
 export function useGetMainCart({ userId }: UseGetMainCartProps) {
-  return useQuery<UserMainCartI | undefined>({
+  return useQuery<UserMainCartI>({
     queryKey: ["mainCart", userId],
     queryFn: () =>
       userId ? cartService.getUserMainCart() : Promise.resolve(undefined),
