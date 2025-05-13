@@ -3,16 +3,11 @@ import { ShoppingCart } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 import { Separator } from "../ui/separator";
 import ChangeProductQty from "../shared/change-product-qty";
-import { Button } from "../ui/button";
-import useDeleteCartItem from "@/hooks/react-query-hooks/cart-hooks/useDeleteCartItem";
-import { useAuth } from "@/providers/auth-provider";
+import RemoveItemFromCartButton from "../shared/remove-item-from-cart-button";
 
 function UserCartDropDown() {
   const { cart: userMainCart } = useCart();
-  // const { loggedInUser } = useAuth();
   const cartItems = userMainCart?.cartItems;
-  // const deleteCartItemHandler = useDeleteCartItem(loggedInUser?.id);
-
 
   const cartItemsCount = userMainCart?.cartItems.length || 0;
   const isCartItemsLenReqMoreSpace = cartItemsCount > 99;
@@ -53,9 +48,12 @@ function UserCartDropDown() {
                       alt={cartItem.product.name}
                     />
                   </div>
-                  <div className="min-w-40 flex flex-col gap-4">
+                  <div className="min-w-40 flex flex-col gap-2">
                     <ChangeProductQty productId={cartItem.product.id} />
-                    <Button>Remove Item</Button>
+                    <RemoveItemFromCartButton
+                      cartItemId={cartItem.id}
+                      cartId={userMainCart.id}
+                    />
                   </div>
                 </div>
                 {index !== cartItems.length - 1 && (

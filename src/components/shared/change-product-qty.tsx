@@ -10,7 +10,7 @@ import { useAuth } from "@/providers/auth-provider";
 
 interface ChangeProductQtyProps {
   productId: number;
-  isMainCart: boolean;
+  isMainCart?: boolean;
 }
 
 function ChangeProductQty({
