@@ -4,7 +4,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useChangeCartItemQty(userId: number | undefined) {
   const qClient = useQueryClient();
-  console.log("useChangeCartItemQty", userId);
 
   return useMutation({
     mutationFn: ({

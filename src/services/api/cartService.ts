@@ -60,4 +60,14 @@ export const cartService = {
       throw error;
     }
   },
+
+  clearCart: async (cartId: number) => {
+    try {
+      const response = await api.delete(`${cartBaseApi}/cart-items/clear/${cartId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+      throw error;
+    }
+  },
 };
