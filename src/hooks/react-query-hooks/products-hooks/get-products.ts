@@ -12,7 +12,8 @@ export function useGetProducts(
 ): UseQueryResult<ProductWithPricesI[] | undefined, Error> {
   return useQuery({
     queryKey: ["products", fetchQueryParams, pagination],
-    queryFn: () => productsService.getProducts(fetchQueryParams, pagination),
+    queryFn: ({ signal }) =>
+      productsService.getProducts(fetchQueryParams, pagination, signal),
     enabled: !fetchQueryParams.category || !fetchQueryParams.name,
   });
 }

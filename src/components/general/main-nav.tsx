@@ -40,7 +40,7 @@ export function MainNav() {
             </Link>
           </nav>
           {/* Should be the input component */}
-          <div className="hidden break-500px:block break-800px:ms-4 w-full max-w-2xl flex-1">
+          <div className="hidden break-390px:block break-800px:ms-4 w-full max-w-2xl flex-1">
             <IconInput Icon={Search} />
           </div>
         </div>

@@ -1,11 +1,11 @@
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
-import { useCart } from "@/hooks/useCart";
 import UserCartIcon from "./user-cart-icon";
 import UserCartDropDownContent from "./user-cart-drop-down-content";
 import { useEffect, useState } from "react";
+import { useUserMainCart } from "@/providers/user_cart-provider";
 
 function UserCartDropDown() {
-  const { cart: userMainCart } = useCart();
+  const { userMainCart } = useUserMainCart();
   const [popOverOpen, setPopOverOpen] = useState(false);
   const cartItems = userMainCart?.cartItems;
 

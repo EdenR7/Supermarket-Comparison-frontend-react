@@ -67,6 +67,8 @@ module.exports = {
       },
       screens: {
         "1col": "350px",
+        "break-370px": "370px",
+        "break-390px": "390px",
         "break-400px": "400px",
         "break-450px": "450px",
         "break-500px": "500px",

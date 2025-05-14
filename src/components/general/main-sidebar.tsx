@@ -21,7 +21,7 @@ export function MainSideBar() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button className=" sm:hidden" variant="naked">
+        <Button className=" sm:hidden p-0" variant="naked">
           <AlignJustify />
         </Button>
       </SheetTrigger>

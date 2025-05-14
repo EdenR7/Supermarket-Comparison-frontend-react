@@ -1,6 +1,5 @@
 import { Button, ButtonProps } from "../ui/button";
-import { useClearCart } from "@/hooks/react-query-hooks/cart-hooks/useClearCart";
-import { useAuth } from "@/providers/auth-provider";
+import { useUserMainCart } from "@/providers/user_cart-provider";
 
 interface ClearCartButtonProps extends Omit<ButtonProps, "onClick"> {
   cartId: number;
@@ -22,32 +21,16 @@ function ClearCartButton({
   children = "Clear Cart",
   ...buttonProps
 }: ClearCartButtonProps) {
-  const { loggedInUser } = useAuth();
-  const clearCartMutation = useClearCart({ userId: loggedInUser?.id });
-
-  async function handleClearCart() {
-    if (loggedInUser) {
-      try {
-        await clearCartMutation.mutateAsync({
-          cartId,
-          isMainCart,
-        });
-      } catch (error) {
-        console.error("Error clearing cart:", error);
-      }
-    } else {
-      console.log("Please login to clear cart");
-    }
-  }
+  const { clearCart, isLoading } = useUserMainCart();
 
   return (
     <Button
       variant={variant}
-      onClick={handleClearCart}
-      disabled={clearCartMutation.isPending}
+      onClick={clearCart}
+      disabled={isLoading}
       {...buttonProps}
     >
-      {clearCartMutation.isPending ? "Clearing..." : children}
+      {isLoading ? "Clearing..." : children}
     </Button>
   );
 }

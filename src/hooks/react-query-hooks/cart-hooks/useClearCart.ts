@@ -2,7 +2,7 @@ import { cartService } from "@/services/api/cartService";
 import { UserMainCartI } from "@/types/cart/cart.types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useClearCart({ userId }: { userId: number | undefined }) {
+export function useClearCart(userId: number | undefined) {
   const queryClient = useQueryClient();
 
   return useMutation({

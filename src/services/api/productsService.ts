@@ -10,11 +10,13 @@ export interface ProductFilters {
 export const productsService = {
   getProducts: async (
     filters?: ProductFilters,
-    pagination?: PaginationI
+    pagination?: PaginationI,
+    signal?: AbortSignal
   ): Promise<ProductWithPricesI[]> => {
     try {
       const response = await api.get("/products", {
         params: { ...filters, ...pagination },
+        signal,
       });
       return response.data;
     } catch (error) {

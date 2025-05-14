@@ -4,13 +4,14 @@ import AppLoader from "@/components/shared/app-loader";
 import { useCombinedGetAllCountAllProducts } from "@/hooks/react-query-hooks/products-hooks/combined-get_all-count_all";
 import PaginatorApp from "@/components/shared/pagination-app";
 import ProductCard from "@/components/products-page/product-card";
-import { useCart } from "@/hooks/useCart";
+import { useUserMainCart } from "@/providers/user_cart-provider";
 
 function ProductsPage() {
-  const { cart: userCart } = useCart();
+  const { userMainCart } = useUserMainCart();
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryQueryParams = searchParams.get("category") || "";
   const nameQueryParams = searchParams.get("name") || "";
+  console.log("userCart", userMainCart);
 
   const [page, setPage] = useState(1);
   const pageSize = 8;
@@ -32,7 +33,7 @@ function ProductsPage() {
     return <AppLoader />;
   }
 
-  if (!userCart) {
+  if (!userMainCart) {
     return <div>No cart found</div>;
   }
 
@@ -41,7 +42,7 @@ function ProductsPage() {
       <ul className="grid gap-4 justify-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {products?.map((product) => (
           <li className="max-w-xs" key={product.id}>
-            <ProductCard product={product} cart={userCart} />
+            <ProductCard product={product} cart={userMainCart} />
           </li>
         ))}
       </ul>
