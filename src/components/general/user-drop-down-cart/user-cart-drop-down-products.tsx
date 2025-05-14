@@ -12,8 +12,6 @@ function UserCartDropDownProducts({
   cartItems,
   cartId,
 }: UserCartDropDownProductsProps) {
-  console.log("cartItems", cartItems);
-
   return (
     <ul>
       {cartItems.map((cartItem, index) => (
