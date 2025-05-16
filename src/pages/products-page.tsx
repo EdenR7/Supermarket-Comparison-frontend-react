@@ -11,7 +11,6 @@ function ProductsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryQueryParams = searchParams.get("category") || "";
   const nameQueryParams = searchParams.get("name") || "";
-  console.log("userCart", userMainCart);
 
   const [page, setPage] = useState(1);
   const pageSize = 8;
@@ -42,7 +41,7 @@ function ProductsPage() {
       <ul className="grid gap-4 justify-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {products?.map((product) => (
           <li className="max-w-xs" key={product.id}>
-            <ProductCard product={product} cart={userMainCart} />
+            <ProductCard product={product} type="page" />
           </li>
         ))}
       </ul>

@@ -14,6 +14,6 @@ export function useGetProducts(
     queryKey: ["products", fetchQueryParams, pagination],
     queryFn: ({ signal }) =>
       productsService.getProducts(fetchQueryParams, pagination, signal),
-    enabled: !fetchQueryParams.category || !fetchQueryParams.name,
+    enabled: !!fetchQueryParams.category || !!fetchQueryParams.name,
   });
 }
