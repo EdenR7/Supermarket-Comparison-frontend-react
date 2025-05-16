@@ -29,9 +29,8 @@ function ProductCard({ product, type }: ProductCardProps) {
   return type === "tab" ? (
     <ProductTab product={product} isInCart={isInCart || false} />
   ) : (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">{product.name}</CardTitle>
+    <Card className="h-full hover:scale-[1.01] transition-all duration-75">
+      <CardHeader className="space-y-4">
         <img
           className="w-1/2 mx-auto"
           src={
@@ -40,6 +39,7 @@ function ProductCard({ product, type }: ProductCardProps) {
           }
           alt={product.name}
         />
+        <CardTitle className="text-md">{product.name}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
         <CardDescription className=" space-x-1">

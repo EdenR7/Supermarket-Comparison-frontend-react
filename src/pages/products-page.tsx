@@ -37,8 +37,8 @@ function ProductsPage() {
   }
 
   return (
-    <div className=" flex flex-col gap-4">
-      <ul className="grid gap-4 justify-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div className=" flex flex-col items-center gap-4 mx-auto">
+      <ul className="grid gap-1 justify-items-center grid-cols-1 break-450px:grid-cols-2 break-700px:grid-cols-3 break-950px:grid-cols-4 max-w-7xl">
         {products?.map((product) => (
           <li className="max-w-xs" key={product.id}>
             <ProductCard product={product} type="page" />
