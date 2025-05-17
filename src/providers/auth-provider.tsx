@@ -59,6 +59,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const response = await authService.login(cred);
       setToken(response.data.token);
       // If the user had local storage cart, add it to the user's main cart and delete it from local storage
+      await mergeGuestCart();
+    } catch (error) {
+      console.error("Error logging in:", error);
+      throw error;
+    } finally {
+      localStorage.removeItem(GUEST_CART_KEY);
+    }
+  }
+
+  async function mergeGuestCart() {
+    try {
       const localCart = localStorage.getItem(GUEST_CART_KEY);
       if (!localCart) {
         console.log("No guest cart found");
