@@ -19,9 +19,9 @@ function CategorySelect() {
 
   return (
     <div className="sm:hidden">
-      <Select onValueChange={handleCategoryClick} defaultValue="Milk and Eggs">
+      <Select onValueChange={handleCategoryClick}>
         <SelectTrigger className="w-full outline-none py-3 px-6 sm:pe-8 bg-red-500 data-[placeholder]:text-white text-white">
-          <SelectValue placeholder="Select a category" />
+          <SelectValue placeholder="Find By Category" />
         </SelectTrigger>
         <SelectContent
           position="popper"
