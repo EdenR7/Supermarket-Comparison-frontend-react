@@ -18,3 +18,10 @@ export interface CartItemI {
   quantity: number;
   product: ProductI;
 }
+
+export interface CartItemApiI {
+  id: number;
+  cart_id: number;
+  product_id: number;
+  quantity: number;
+}

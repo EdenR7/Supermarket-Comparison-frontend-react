@@ -6,6 +6,8 @@ import { LoggedInUserI } from "@/types/users/user.types";
 import { userService } from "@/services/api/userService";
 import { authService } from "@/services/api/authService";
 import { UserMainCartI } from "@/types/cart/cart.types";
+import { GUEST_CART_KEY } from "@/services/localStorage/guestCartService";
+import { cartService } from "@/services/api/cartService";
 
 interface AuthContextType {
   loggedInUser: LoggedInUserI | null | undefined;
@@ -56,9 +58,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const response = await authService.login(cred);
       setToken(response.data.token);
+      // If the user had local storage cart, add it to the user's main cart and delete it from local storage
+      const localCart = localStorage.getItem(GUEST_CART_KEY);
+      if (!localCart) {
+        console.log("No guest cart found");
+        throw new Error("No guest cart found");
+      }
+      const parsedCart = JSON.parse(localCart) as UserMainCartI;
+      if (parsedCart.cartItems.length === 0 || !parsedCart) return;
+      const cartItemsForCreation = parsedCart.cartItems.map((item) => ({
+        product_id: item.product.id,
+        quantity: item.quantity,
+      }));
+      await cartService.mergeGuestCart(cartItemsForCreation);
     } catch (error) {
       console.error("Error logging in:", error);
       throw error;
+    } finally {
+      localStorage.removeItem(GUEST_CART_KEY);
     }
   }
 

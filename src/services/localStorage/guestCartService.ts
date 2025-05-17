@@ -2,7 +2,7 @@ import { CartItemI, UserMainCartI } from "@/types/cart/cart.types";
 import { ProductWithPricesI } from "@/types/products/product.types";
 import { customAlphabet } from "nanoid";
 
-const GUEST_CART_KEY = "guest-cart";
+export const GUEST_CART_KEY = "guest-cart";
 
 // Helper to generate unique IDs for cart items
 function generateId(): number {

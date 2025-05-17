@@ -33,13 +33,13 @@ const IconInput = React.forwardRef<HTMLInputElement, IconInputProps>(
   ({ className, type, Icon, ...props }, ref) => {
     return (
       <div className="relative">
-        <span className="absolute inset-y-0 left-0 flex items-center pl-3 z-[9999]">
+        <span className="absolute inset-y-0 left-0 flex items-center ps-3 z-[9999]">
           <Icon size={14} className="text-gray-500 text-sm" />
         </span>
         <input
           type={type}
           className={cn(
-            "ps-10 p-2 text-sm border outline-primary rounded-lg w-full bg-background placeholder:text-gray-500",
+            "ps-8 py-2 text-sm border outline-primary rounded-lg w-full bg-background placeholder:text-gray-500",
             className
           )}
           ref={ref}

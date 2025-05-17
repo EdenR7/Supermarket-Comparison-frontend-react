@@ -1,7 +1,7 @@
 // Cart service for shopping cart operations
 
 import api from "@/lib/api";
-import { CartItemI } from "@/types/cart/cart.types";
+import { CartItemApiI, CartItemI } from "@/types/cart/cart.types";
 const cartBaseApi = "/carts";
 
 export const cartService = {
@@ -63,10 +63,26 @@ export const cartService = {
 
   clearCart: async (cartId: number) => {
     try {
-      const response = await api.delete(`${cartBaseApi}/cart-items/clear/${cartId}`);
+      const response = await api.delete(
+        `${cartBaseApi}/cart-items/clear/${cartId}`
+      );
       return response.data;
     } catch (error) {
       console.error("Error clearing cart:", error);
+      throw error;
+    }
+  },
+
+  mergeGuestCart: async (
+    cartItemsForCreation: Omit<CartItemApiI, "id" | "cart_id">[]
+  ) => {
+    try {
+      const response = await api.put(`${cartBaseApi}/merge-to-main`, {
+        cartItems: cartItemsForCreation,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error merging guest cart:", error);
       throw error;
     }
   },
