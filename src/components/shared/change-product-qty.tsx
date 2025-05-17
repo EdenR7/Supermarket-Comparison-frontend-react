@@ -35,6 +35,9 @@ function ChangeProductQty({ productId }: ChangeProductQtyProps) {
   }, [cartItem?.quantity]);
 
   function handleQtyChange(value: number) {
+    if (value < 1) {
+      if (userMainCart?.id && cartItem?.id) removeProductFromCart(cartItem.id);
+    }
     setQty(value);
     if (userMainCart?.id && cartItem?.id) {
       debouncedChangeCartItemQty(value, cartItem.id);
