@@ -6,3 +6,9 @@ export const PRODUCT_CATEGORIES = [
   "Frozens",
   "Sweets",
 ];
+
+export const SUPERMARKET_NAMES = [
+  "Shufersal",
+  "Yohananof",
+  "Rami Levi",
+];

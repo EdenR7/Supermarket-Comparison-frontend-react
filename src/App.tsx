@@ -16,6 +16,7 @@ import TeamPage from "./pages/vision-page";
 import VisionPage from "./pages/team-page";
 import ProductsPage from "./pages/products-page";
 import NotFoundPage from "./pages/not-found-page";
+import ComparisonPage from "./pages/comparison-page";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
         path: "products",
         element: <ProductsPage />,
         children: [],
+      },
+      {
+        path: "comparison",
+        element: <ComparisonPage />,
       },
       {
         path: "protected",
@@ -109,7 +114,9 @@ function AuthRoutes({ children }: { children: React.ReactNode }) {
   return children;
 }
 
-function App() {
+
+function 
+App() {
   return <RouterProvider router={router} />;
 }
 

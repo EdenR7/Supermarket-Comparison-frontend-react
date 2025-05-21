@@ -28,9 +28,9 @@ export function MainNav() {
               </Link>
               <Link
                 className=" hover:underline decoration-primary"
-                to="/products"
+                to="/comparison"
               >
-                Products
+                Comparison
               </Link>
               <Link
                 className=" hover:underline decoration-primary"
